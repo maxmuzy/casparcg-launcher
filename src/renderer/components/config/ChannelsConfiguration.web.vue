@@ -51,14 +51,7 @@
         <div v-if="!channel.producers || channel.producers.length === 0" class="text-muted text-center py-2">
           No producers configured
         </div>
-        <b-table
-          v-else
-          :items="channel.producers"
-          :fields="producerFields"
-          small
-          bordered
-          responsive
-        >
+        <b-table v-else :items="channel.producers" :fields="producerFields" small bordered responsive>
           <template #cell(id)="data">
             <b-form-input
               type="number"
@@ -66,7 +59,7 @@
               :value="data.item.id"
               @input="updateProducerField(index, data.index, 'id', parseInt($event) || 0)"
               min="0"
-              style="width: 80px"
+              style="width: 80px;"
             />
           </template>
           <template #cell(command)="data">

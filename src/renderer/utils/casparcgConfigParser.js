@@ -444,9 +444,7 @@ function parseAudioSection(audio) {
         mappings: [],
       }
       if (mc.mappings && mc.mappings.mapping) {
-        const mappings = Array.isArray(mc.mappings.mapping)
-          ? mc.mappings.mapping
-          : [mc.mappings.mapping]
+        const mappings = Array.isArray(mc.mappings.mapping) ? mc.mappings.mapping : [mc.mappings.mapping]
         config.mappings = mappings.map((m) => (typeof m === 'string' ? m.trim() : m))
       }
       return config
@@ -653,7 +651,8 @@ function configToXml(config) {
       producer: {},
     }
     if (config.systemAudio.producer.defaultDeviceName) {
-      xmlObj.configuration['system-audio'].producer['default-device-name'] = config.systemAudio.producer.defaultDeviceName
+      xmlObj.configuration['system-audio'].producer['default-device-name'] =
+        config.systemAudio.producer.defaultDeviceName
     }
   }
 

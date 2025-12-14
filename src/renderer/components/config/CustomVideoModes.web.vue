@@ -8,13 +8,7 @@
         Add Video Mode
       </b-button>
     </div>
-    <b-table
-      v-if="customVideoModes.length > 0"
-      :items="customVideoModes"
-      :fields="fields"
-      small
-      striped
-    >
+    <b-table v-if="customVideoModes.length > 0" :items="customVideoModes" :fields="fields" small striped>
       <template #cell(id)="row">
         <b-form-input
           size="sm"
@@ -100,11 +94,7 @@ export default {
     ...mapGetters('CasparcgConfig', ['customVideoModes']),
   },
   methods: {
-    ...mapActions('CasparcgConfig', [
-      'addCustomVideoMode',
-      'removeCustomVideoMode',
-      'updateCustomVideoMode',
-    ]),
+    ...mapActions('CasparcgConfig', ['addCustomVideoMode', 'removeCustomVideoMode', 'updateCustomVideoMode']),
     addMode() {
       this.addCustomVideoMode({
         id: '',

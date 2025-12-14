@@ -196,10 +196,7 @@
           </b-form-group>
         </b-col>
         <b-col md="4">
-          <b-form-checkbox
-            :checked="port.keyOnly"
-            @change="updatePort(index, 'keyOnly', $event)"
-          >
+          <b-form-checkbox :checked="port.keyOnly" @change="updatePort(index, 'keyOnly', $event)">
             Key Only
           </b-form-checkbox>
         </b-col>

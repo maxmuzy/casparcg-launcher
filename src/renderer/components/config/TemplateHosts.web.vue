@@ -8,13 +8,7 @@
         Add Template Host
       </b-button>
     </div>
-    <b-table
-      v-if="templateHosts.length > 0"
-      :items="templateHosts"
-      :fields="fields"
-      small
-      striped
-    >
+    <b-table v-if="templateHosts.length > 0" :items="templateHosts" :fields="fields" small striped>
       <template #cell(videoMode)="row">
         <b-form-select
           size="sm"
@@ -83,11 +77,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('CasparcgConfig', [
-      'addTemplateHost',
-      'removeTemplateHost',
-      'updateTemplateHost',
-    ]),
+    ...mapActions('CasparcgConfig', ['addTemplateHost', 'removeTemplateHost', 'updateTemplateHost']),
     addHost() {
       this.addTemplateHost({
         videoMode: '',

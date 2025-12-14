@@ -65,12 +65,7 @@
             Add Mix Config
           </b-button>
         </div>
-        <b-card
-          v-for="(mix, index) in audio.mixConfigs"
-          :key="index"
-          class="mb-2"
-          bg-variant="light"
-        >
+        <b-card v-for="(mix, index) in audio.mixConfigs" :key="index" class="mb-2" bg-variant="light">
           <b-row>
             <b-col md="3">
               <b-form-group label="From" label-cols-sm="4" label-size="sm">
@@ -126,7 +121,7 @@
                 :value="mapping"
                 @input="updateMapping(index, mIndex, $event)"
                 placeholder="L L 1.0"
-                style="max-width: 250px"
+                style="max-width: 250px;"
               />
               <b-button size="sm" variant="outline-danger" @click="removeMapping(index, mIndex)">
                 <i class="fa fa-times"></i>
