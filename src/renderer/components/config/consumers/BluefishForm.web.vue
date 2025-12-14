@@ -3,12 +3,7 @@
     <b-row>
       <b-col md="4">
         <b-form-group label="Device">
-          <b-form-input
-            type="number"
-            :value="config.device"
-            @input="update('device', parseInt($event) || 1)"
-            min="1"
-          />
+          <b-form-input type="number" :value="config.device" @input="update('device', parseInt($event) || 1)" min="1" />
         </b-form-group>
       </b-col>
       <b-col md="4">
@@ -35,11 +30,7 @@
     <b-row>
       <b-col md="6">
         <b-form-group label="Keyer">
-          <b-form-select
-            :value="config.keyer"
-            :options="keyerOptions"
-            @change="update('keyer', $event)"
-          />
+          <b-form-select :value="config.keyer" :options="keyerOptions" @change="update('keyer', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="6">
@@ -55,11 +46,7 @@
     <b-row>
       <b-col md="6">
         <b-form-group label="UHD Mode">
-          <b-form-select
-            :value="config.uhdMode"
-            :options="uhdModes"
-            @change="update('uhdMode', $event)"
-          />
+          <b-form-select :value="config.uhdMode" :options="uhdModes" @change="update('uhdMode', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="6">

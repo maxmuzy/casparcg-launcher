@@ -3,12 +3,7 @@
     <b-row>
       <b-col md="4">
         <b-form-group label="Device">
-          <b-form-input
-            type="number"
-            :value="config.device"
-            @input="update('device', parseInt($event) || 1)"
-            min="1"
-          />
+          <b-form-input type="number" :value="config.device" @input="update('device', parseInt($event) || 1)" min="1" />
         </b-form-group>
       </b-col>
       <b-col md="4">
@@ -35,29 +30,17 @@
     <b-row>
       <b-col md="4">
         <b-form-group label="Latency">
-          <b-form-select
-            :value="config.latency"
-            :options="latencyOptions"
-            @change="update('latency', $event)"
-          />
+          <b-form-select :value="config.latency" :options="latencyOptions" @change="update('latency', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="4">
         <b-form-group label="Keyer">
-          <b-form-select
-            :value="config.keyer"
-            :options="keyerOptions"
-            @change="update('keyer', $event)"
-          />
+          <b-form-select :value="config.keyer" :options="keyerOptions" @change="update('keyer', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="4">
         <b-form-group label="Pixel Format">
-          <b-form-select
-            :value="config.pixelFormat"
-            :options="pixelFormats"
-            @change="update('pixelFormat', $event)"
-          />
+          <b-form-select :value="config.pixelFormat" :options="pixelFormats" @change="update('pixelFormat', $event)" />
         </b-form-group>
       </b-col>
     </b-row>
@@ -76,20 +59,12 @@
     <b-row class="mt-3">
       <b-col md="6">
         <b-form-group label="Video Mode (Override)">
-          <b-form-select
-            :value="config.videoMode"
-            :options="videoModes"
-            @change="update('videoMode', $event)"
-          />
+          <b-form-select :value="config.videoMode" :options="videoModes" @change="update('videoMode', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="6">
         <b-form-group label="Color Space (Override)">
-          <b-form-select
-            :value="config.colorSpace"
-            :options="colorSpaces"
-            @change="update('colorSpace', $event)"
-          />
+          <b-form-select :value="config.colorSpace" :options="colorSpaces" @change="update('colorSpace', $event)" />
         </b-form-group>
       </b-col>
     </b-row>

@@ -33,7 +33,7 @@
           {
             "modules": false,
             "targets": {
-              "electron": 9
+              "browsers": ["> 1%", "last 2 versions", "not dead"]
             }
           }
         ]

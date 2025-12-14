@@ -1,4 +1,4 @@
-const xml2js = require('xml2js')
+import xml2js from 'xml2js'
 
 const VIDEO_MODES = [
   'PAL',
@@ -77,7 +77,10 @@ function getDefaultConfig() {
         videoMode: '720p5000',
         colorDepth: 8,
         colorSpace: 'bt709',
-        consumers: [{ type: 'screen', config: {} }, { type: 'system-audio', config: {} }],
+        consumers: [
+          { type: 'screen', config: {} },
+          { type: 'system-audio', config: {} },
+        ],
         producers: [],
       },
     ],
@@ -194,8 +197,7 @@ function parseXmlToConfig(xmlString) {
         }
 
         if (xmlConfig.ffmpeg && xmlConfig.ffmpeg.producer) {
-          config.ffmpeg.producer.autoDeinterlace =
-            xmlConfig.ffmpeg.producer['auto-deinterlace'] || 'interlaced'
+          config.ffmpeg.producer.autoDeinterlace = xmlConfig.ffmpeg.producer['auto-deinterlace'] || 'interlaced'
           config.ffmpeg.producer.threads = parseInt(xmlConfig.ffmpeg.producer.threads) || 4
         }
 
@@ -212,8 +214,7 @@ function parseXmlToConfig(xmlString) {
 
         if (xmlConfig.osc) {
           config.osc.defaultPort = parseInt(xmlConfig.osc['default-port']) || 6250
-          config.osc.disableSendToAmcpClients =
-            xmlConfig.osc['disable-send-to-amcp-clients'] === 'true'
+          config.osc.disableSendToAmcpClients = xmlConfig.osc['disable-send-to-amcp-clients'] === 'true'
           if (xmlConfig.osc['predefined-clients'] && xmlConfig.osc['predefined-clients']['predefined-client']) {
             const clients = Array.isArray(xmlConfig.osc['predefined-clients']['predefined-client'])
               ? xmlConfig.osc['predefined-clients']['predefined-client']
@@ -244,9 +245,7 @@ function parseChannel(ch) {
 
   if (ch.consumers) {
     if (ch.consumers.decklink) {
-      const decklinks = Array.isArray(ch.consumers.decklink)
-        ? ch.consumers.decklink
-        : [ch.consumers.decklink]
+      const decklinks = Array.isArray(ch.consumers.decklink) ? ch.consumers.decklink : [ch.consumers.decklink]
       decklinks.forEach((d) => {
         channel.consumers.push({ type: 'decklink', config: parseDecklinkConsumer(d) })
       })
@@ -278,9 +277,7 @@ function parseChannel(ch) {
     }
 
     if (ch.consumers.bluefish) {
-      const bluefishes = Array.isArray(ch.consumers.bluefish)
-        ? ch.consumers.bluefish
-        : [ch.consumers.bluefish]
+      const bluefishes = Array.isArray(ch.consumers.bluefish) ? ch.consumers.bluefish : [ch.consumers.bluefish]
       bluefishes.forEach((b) => {
         channel.consumers.push({ type: 'bluefish', config: parseBluefishConsumer(b) })
       })
@@ -295,9 +292,7 @@ function parseChannel(ch) {
   }
 
   if (ch.producers && ch.producers.producer) {
-    const producers = Array.isArray(ch.producers.producer)
-      ? ch.producers.producer
-      : [ch.producers.producer]
+    const producers = Array.isArray(ch.producers.producer) ? ch.producers.producer : [ch.producers.producer]
     channel.producers = producers.map((p) => ({
       id: parseInt(p.id) || 0,
       command: p._ || p || '',
@@ -570,8 +565,7 @@ function buildDecklinkXml(config) {
   if (config.videoMode) dl['video-mode'] = config.videoMode
   if (config.colorSpace) dl['color-space'] = config.colorSpace
   if (config.waitForReference !== 'auto') dl['wait-for-reference'] = config.waitForReference
-  if (config.waitForReferenceDuration !== 10)
-    dl['wait-for-reference-duration'] = config.waitForReferenceDuration
+  if (config.waitForReferenceDuration !== 10) dl['wait-for-reference-duration'] = config.waitForReferenceDuration
   return dl
 }
 
@@ -626,7 +620,7 @@ function buildArtnetXml(config) {
   return artnet
 }
 
-module.exports = {
+export {
   VIDEO_MODES,
   LOG_LEVELS,
   LATENCY_OPTIONS,

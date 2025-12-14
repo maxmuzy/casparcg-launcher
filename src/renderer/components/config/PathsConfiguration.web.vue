@@ -1,19 +1,11 @@
 <template>
   <b-card header="Paths Configuration" class="mb-3">
     <b-form-group label="Media Path" label-cols-sm="3">
-      <b-form-input
-        :value="paths.mediaPath"
-        @input="updatePath('mediaPath', $event)"
-        placeholder="media/"
-      />
+      <b-form-input :value="paths.mediaPath" @input="updatePath('mediaPath', $event)" placeholder="media/" />
     </b-form-group>
     <b-form-group label="Log Path" label-cols-sm="3">
       <b-input-group>
-        <b-form-input
-          :value="paths.logPath"
-          @input="updatePath('logPath', $event)"
-          placeholder="log/"
-        />
+        <b-form-input :value="paths.logPath" @input="updatePath('logPath', $event)" placeholder="log/" />
         <b-input-group-append>
           <b-form-checkbox
             :checked="paths.logPathDisable"
@@ -27,18 +19,10 @@
       </b-input-group>
     </b-form-group>
     <b-form-group label="Data Path" label-cols-sm="3">
-      <b-form-input
-        :value="paths.dataPath"
-        @input="updatePath('dataPath', $event)"
-        placeholder="data/"
-      />
+      <b-form-input :value="paths.dataPath" @input="updatePath('dataPath', $event)" placeholder="data/" />
     </b-form-group>
     <b-form-group label="Template Path" label-cols-sm="3">
-      <b-form-input
-        :value="paths.templatePath"
-        @input="updatePath('templatePath', $event)"
-        placeholder="template/"
-      />
+      <b-form-input :value="paths.templatePath" @input="updatePath('templatePath', $event)" placeholder="template/" />
     </b-form-group>
   </b-card>
 </template>

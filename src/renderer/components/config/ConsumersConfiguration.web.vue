@@ -25,19 +25,10 @@
           <span class="text-muted small">{{ getConsumerSummary(consumer) }}</span>
         </div>
         <div>
-          <b-button
-            size="sm"
-            variant="outline-info"
-            class="mr-1"
-            @click="editConsumer(cIndex)"
-          >
+          <b-button size="sm" variant="outline-info" class="mr-1" @click="editConsumer(cIndex)">
             <i class="fa fa-edit"></i>
           </b-button>
-          <b-button
-            size="sm"
-            variant="outline-danger"
-            @click="removeConsumerAt(cIndex)"
-          >
+          <b-button size="sm" variant="outline-danger" @click="removeConsumerAt(cIndex)">
             <i class="fa fa-trash"></i>
           </b-button>
         </div>
@@ -82,11 +73,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('CasparcgConfig', [
-      'addConsumer',
-      'removeConsumer',
-      'updateConsumer',
-    ]),
+    ...mapActions('CasparcgConfig', ['addConsumer', 'removeConsumer', 'updateConsumer']),
     getConsumerVariant(type) {
       const variants = {
         screen: 'primary',

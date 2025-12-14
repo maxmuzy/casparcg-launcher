@@ -52,8 +52,12 @@ let webConfig = {
       {
         test: /\.js$/,
         use: 'babel-loader',
-        include: [ path.resolve(__dirname, '../src/renderer') ],
-        exclude: /node_modules/
+        include: [
+          path.resolve(__dirname, '../src/renderer'),
+          path.resolve(__dirname, '../node_modules/xml2js'),
+          path.resolve(__dirname, '../node_modules/sax'),
+          path.resolve(__dirname, '../node_modules/xmlbuilder')
+        ]
       },
       {
         test: /\.vue$/,

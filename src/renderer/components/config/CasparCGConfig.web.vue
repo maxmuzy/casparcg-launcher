@@ -38,11 +38,7 @@
       </b-tab>
     </b-tabs>
 
-    <b-modal
-      v-model="showLoadModal"
-      title="Load Configuration"
-      @ok="handleLoad"
-    >
+    <b-modal v-model="showLoadModal" title="Load Configuration" @ok="handleLoad">
       <b-form-group label="Paste casparcg.config XML content:">
         <b-form-textarea
           v-model="xmlInput"
@@ -55,19 +51,9 @@
       </b-form-group>
     </b-modal>
 
-    <b-modal
-      v-model="showExportModal"
-      title="Export Configuration"
-      size="lg"
-      ok-only
-      ok-title="Close"
-    >
+    <b-modal v-model="showExportModal" title="Export Configuration" size="lg" ok-only ok-title="Close">
       <b-form-group label="Generated casparcg.config XML:">
-        <b-form-textarea
-          v-model="xmlOutput"
-          rows="15"
-          readonly
-        />
+        <b-form-textarea v-model="xmlOutput" rows="15" readonly />
       </b-form-group>
       <b-button variant="primary" size="sm" @click="copyToClipboard">
         <i class="fa fa-copy"></i> Copy to Clipboard

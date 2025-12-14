@@ -3,41 +3,24 @@
     <b-row>
       <b-col md="6">
         <b-form-group label="Device">
-          <b-form-input
-            type="number"
-            :value="config.device"
-            @input="update('device', parseInt($event) || 1)"
-            min="1"
-          />
+          <b-form-input type="number" :value="config.device" @input="update('device', parseInt($event) || 1)" min="1" />
         </b-form-group>
       </b-col>
       <b-col md="6">
         <b-form-group label="Aspect Ratio">
-          <b-form-select
-            :value="config.aspectRatio"
-            :options="aspectRatios"
-            @change="update('aspectRatio', $event)"
-          />
+          <b-form-select :value="config.aspectRatio" :options="aspectRatios" @change="update('aspectRatio', $event)" />
         </b-form-group>
       </b-col>
     </b-row>
     <b-row>
       <b-col md="6">
         <b-form-group label="Stretch">
-          <b-form-select
-            :value="config.stretch"
-            :options="stretchOptions"
-            @change="update('stretch', $event)"
-          />
+          <b-form-select :value="config.stretch" :options="stretchOptions" @change="update('stretch', $event)" />
         </b-form-group>
       </b-col>
       <b-col md="6">
         <b-form-group label="Colour Space">
-          <b-form-select
-            :value="config.colourSpace"
-            :options="colourSpaces"
-            @change="update('colourSpace', $event)"
-          />
+          <b-form-select :value="config.colourSpace" :options="colourSpaces" @change="update('colourSpace', $event)" />
         </b-form-group>
       </b-col>
     </b-row>

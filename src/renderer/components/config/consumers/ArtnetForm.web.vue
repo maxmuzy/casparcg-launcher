@@ -13,21 +13,12 @@
       </b-col>
       <b-col md="4">
         <b-form-group label="Host">
-          <b-form-input
-            :value="config.host"
-            @input="update('host', $event)"
-            placeholder="127.0.0.1"
-          />
+          <b-form-input :value="config.host" @input="update('host', $event)" placeholder="127.0.0.1" />
         </b-form-group>
       </b-col>
       <b-col md="2">
         <b-form-group label="Port">
-          <b-form-input
-            type="number"
-            :value="config.port"
-            @input="update('port', parseInt($event) || 6454)"
-            min="1"
-          />
+          <b-form-input type="number" :value="config.port" @input="update('port', parseInt($event) || 6454)" min="1" />
         </b-form-group>
       </b-col>
       <b-col md="3">
@@ -48,13 +39,7 @@
         Add Fixture
       </b-button>
     </div>
-    <b-table
-      v-if="localFixtures.length > 0"
-      :items="localFixtures"
-      :fields="fixtureFields"
-      small
-      striped
-    >
+    <b-table v-if="localFixtures.length > 0" :items="localFixtures" :fields="fixtureFields" small striped>
       <template #cell(actions)="row">
         <b-button size="sm" variant="outline-danger" @click="removeFixture(row.index)">
           <i class="fa fa-trash"></i>

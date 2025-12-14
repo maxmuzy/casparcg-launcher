@@ -7,36 +7,12 @@
     @ok="handleSave"
   >
     <template v-if="consumer">
-      <screen-form
-        v-if="consumer.type === 'screen'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
-      <decklink-form
-        v-else-if="consumer.type === 'decklink'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
-      <ndi-form
-        v-else-if="consumer.type === 'ndi'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
-      <ffmpeg-form
-        v-else-if="consumer.type === 'ffmpeg'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
-      <bluefish-form
-        v-else-if="consumer.type === 'bluefish'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
-      <artnet-form
-        v-else-if="consumer.type === 'artnet'"
-        :config="localConfig"
-        @update="updateConfig"
-      />
+      <screen-form v-if="consumer.type === 'screen'" :config="localConfig" @update="updateConfig" />
+      <decklink-form v-else-if="consumer.type === 'decklink'" :config="localConfig" @update="updateConfig" />
+      <ndi-form v-else-if="consumer.type === 'ndi'" :config="localConfig" @update="updateConfig" />
+      <ffmpeg-form v-else-if="consumer.type === 'ffmpeg'" :config="localConfig" @update="updateConfig" />
+      <bluefish-form v-else-if="consumer.type === 'bluefish'" :config="localConfig" @update="updateConfig" />
+      <artnet-form v-else-if="consumer.type === 'artnet'" :config="localConfig" @update="updateConfig" />
       <p v-else class="text-muted">No configuration options for this consumer type</p>
     </template>
   </b-modal>

@@ -119,10 +119,7 @@
 
     <hr />
     <h6>NDI</h6>
-    <b-form-checkbox
-      :checked="config.ndi.autoLoad"
-      @change="updateConfig({ path: 'ndi.autoLoad', value: $event })"
-    >
+    <b-form-checkbox :checked="config.ndi.autoLoad" @change="updateConfig({ path: 'ndi.autoLoad', value: $event })">
       Auto Load NDI
     </b-form-checkbox>
   </b-card>

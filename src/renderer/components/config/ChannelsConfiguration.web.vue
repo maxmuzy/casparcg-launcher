@@ -1,25 +1,13 @@
 <template>
   <b-card header="Channels Configuration" class="mb-3">
     <div class="d-flex justify-content-end mb-3">
-      <b-button variant="success" size="sm" @click="addChannel">
-        <i class="fa fa-plus"></i> Add Channel
-      </b-button>
+      <b-button variant="success" size="sm" @click="addChannel"> <i class="fa fa-plus"></i> Add Channel </b-button>
     </div>
-    <b-card
-      v-for="(channel, index) in channels"
-      :key="index"
-      class="mb-3"
-      :header="`Channel ${index + 1}`"
-    >
+    <b-card v-for="(channel, index) in channels" :key="index" class="mb-3" :header="`Channel ${index + 1}`">
       <template #header>
         <div class="d-flex justify-content-between align-items-center">
           <span>Channel {{ index + 1 }}</span>
-          <b-button
-            variant="danger"
-            size="sm"
-            @click="removeChannel(index)"
-            :disabled="channels.length <= 1"
-          >
+          <b-button variant="danger" size="sm" @click="removeChannel(index)" :disabled="channels.length <= 1">
             <i class="fa fa-trash"></i>
           </b-button>
         </div>
@@ -53,20 +41,14 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <consumers-configuration
-        :channel-index="index"
-        :consumers="channel.consumers"
-      />
+      <consumers-configuration :channel-index="index" :consumers="channel.consumers" />
     </b-card>
   </b-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import {
-  VIDEO_MODES,
-  COLOR_SPACE_OPTIONS,
-} from '../../utils/casparcgConfigParser'
+import { VIDEO_MODES, COLOR_SPACE_OPTIONS } from '../../utils/casparcgConfigParser'
 import ConsumersConfiguration from './ConsumersConfiguration.web.vue'
 
 export default {
@@ -90,11 +72,7 @@ export default {
     ...mapGetters('CasparcgConfig', ['channels']),
   },
   methods: {
-    ...mapActions('CasparcgConfig', [
-      'addChannel',
-      'removeChannel',
-      'updateChannel',
-    ]),
+    ...mapActions('CasparcgConfig', ['addChannel', 'removeChannel', 'updateChannel']),
     updateChannelField(index, field, value) {
       const channel = { ...this.channels[index] }
       channel[field] = value
