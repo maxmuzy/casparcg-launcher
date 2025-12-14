@@ -60,6 +60,8 @@ const PIXEL_FORMAT_OPTIONS = ['yuv', 'rgba']
 
 const AUTO_DEINTERLACE_OPTIONS = ['none', 'interlaced', 'all']
 
+const CHANNEL_LAYOUT_OPTIONS = ['mono', 'stereo', 'matrix']
+
 function getDefaultConfig() {
   return {
     paths: {
@@ -127,6 +129,10 @@ function getDefaultConfig() {
       predefinedClients: [],
     },
     templateHosts: [],
+    audio: {
+      channelLayouts: [],
+      mixConfigs: [],
+    },
   }
 }
 
@@ -226,6 +232,36 @@ function parseXmlToConfig(xmlString) {
           }
         }
 
+        if (xmlConfig.audio) {
+          config.audio = parseAudioSection(xmlConfig.audio)
+        }
+
+        if (xmlConfig['video-modes'] && xmlConfig['video-modes']['video-mode']) {
+          const modes = Array.isArray(xmlConfig['video-modes']['video-mode'])
+            ? xmlConfig['video-modes']['video-mode']
+            : [xmlConfig['video-modes']['video-mode']]
+          config.customVideoModes = modes.map((m) => ({
+            id: m.id || '',
+            width: parseInt(m.width) || 0,
+            height: parseInt(m.height) || 0,
+            timeScale: parseInt(m['time-scale']) || 0,
+            duration: parseInt(m.duration) || 0,
+            cadence: parseInt(m.cadence) || 0,
+          }))
+        }
+
+        if (xmlConfig['template-hosts'] && xmlConfig['template-hosts']['template-host']) {
+          const hosts = Array.isArray(xmlConfig['template-hosts']['template-host'])
+            ? xmlConfig['template-hosts']['template-host']
+            : [xmlConfig['template-hosts']['template-host']]
+          config.templateHosts = hosts.map((h) => ({
+            videoMode: h['video-mode'] || '',
+            filename: h.filename || '',
+            width: parseInt(h.width) || 0,
+            height: parseInt(h.height) || 0,
+          }))
+        }
+
         resolve(config)
       } catch (parseError) {
         reject(parseError)
@@ -259,7 +295,11 @@ function parseChannel(ch) {
     }
 
     if (ch.consumers['system-audio'] !== undefined) {
-      channel.consumers.push({ type: 'system-audio', config: {} })
+      const sysAudio = ch.consumers['system-audio']
+      channel.consumers.push({
+        type: 'system-audio',
+        config: parseSystemAudioConsumer(sysAudio),
+      })
     }
 
     if (ch.consumers.ndi) {
@@ -303,7 +343,7 @@ function parseChannel(ch) {
 }
 
 function parseDecklinkConsumer(d) {
-  return {
+  const config = {
     device: parseInt(d.device) || 1,
     keyDevice: parseInt(d['key-device']) || 0,
     embeddedAudio: d['embedded-audio'] === 'true',
@@ -336,6 +376,79 @@ function parseDecklinkConsumer(d) {
       : null,
     ports: [],
   }
+
+  if (d.ports && d.ports.port) {
+    const ports = Array.isArray(d.ports.port) ? d.ports.port : [d.ports.port]
+    config.ports = ports.map((p) => ({
+      device: parseInt(p.device) || 1,
+      keyOnly: p['key-only'] === 'true',
+      videoMode: p['video-mode'] || '',
+      subregion: p.subregion
+        ? {
+            srcX: parseInt(p.subregion['src-x']) || 0,
+            srcY: parseInt(p.subregion['src-y']) || 0,
+            destX: parseInt(p.subregion['dest-x']) || 0,
+            destY: parseInt(p.subregion['dest-y']) || 0,
+            width: parseInt(p.subregion.width) || 0,
+            height: parseInt(p.subregion.height) || 0,
+          }
+        : null,
+    }))
+  }
+
+  return config
+}
+
+function parseSystemAudioConsumer(s) {
+  if (typeof s !== 'object' || s === null || s === '') {
+    return { channelLayout: 'stereo', latency: 200 }
+  }
+  return {
+    channelLayout: s['channel-layout'] || 'stereo',
+    latency: parseInt(s.latency) || 200,
+  }
+}
+
+function parseAudioSection(audio) {
+  const result = {
+    channelLayouts: [],
+    mixConfigs: [],
+  }
+
+  if (audio['channel-layouts'] && audio['channel-layouts']['channel-layout']) {
+    const layouts = Array.isArray(audio['channel-layouts']['channel-layout'])
+      ? audio['channel-layouts']['channel-layout']
+      : [audio['channel-layouts']['channel-layout']]
+    result.channelLayouts = layouts.map((l) => ({
+      name: l.name || '',
+      type: l.type || '',
+      numChannels: parseInt(l['num-channels']) || 0,
+      channels: (l.channels || '').trim(),
+    }))
+  }
+
+  if (audio['mix-configs'] && audio['mix-configs']['mix-config']) {
+    const mixConfigs = Array.isArray(audio['mix-configs']['mix-config'])
+      ? audio['mix-configs']['mix-config']
+      : [audio['mix-configs']['mix-config']]
+    result.mixConfigs = mixConfigs.map((mc) => {
+      const config = {
+        from: mc.from || '',
+        to: mc.to || '',
+        mix: mc.mix || 'add',
+        mappings: [],
+      }
+      if (mc.mappings && mc.mappings.mapping) {
+        const mappings = Array.isArray(mc.mappings.mapping)
+          ? mc.mappings.mapping
+          : [mc.mappings.mapping]
+        config.mappings = mappings.map((m) => (typeof m === 'string' ? m.trim() : m))
+      }
+      return config
+    })
+  }
+
+  return result
 }
 
 function parseScreenConsumer(s) {
@@ -469,6 +582,78 @@ function configToXml(config) {
     }
   }
 
+  if (config.audio && (config.audio.channelLayouts.length > 0 || config.audio.mixConfigs.length > 0)) {
+    xmlObj.configuration.audio = buildAudioXml(config.audio)
+  }
+
+  if (config.customVideoModes && config.customVideoModes.length > 0) {
+    xmlObj.configuration['video-modes'] = {
+      'video-mode': config.customVideoModes.map((m) => ({
+        id: m.id,
+        width: m.width,
+        height: m.height,
+        'time-scale': m.timeScale,
+        duration: m.duration,
+        cadence: m.cadence,
+      })),
+    }
+  }
+
+  if (config.templateHosts && config.templateHosts.length > 0) {
+    xmlObj.configuration['template-hosts'] = {
+      'template-host': config.templateHosts.map((h) => ({
+        'video-mode': h.videoMode,
+        filename: h.filename,
+        width: h.width,
+        height: h.height,
+      })),
+    }
+  }
+
+  if (config.flash) {
+    xmlObj.configuration.flash = {
+      enabled: config.flash.enabled ? 'true' : 'false',
+      'buffer-depth': config.flash.bufferDepth || 'auto',
+    }
+  }
+
+  if (config.ffmpeg && config.ffmpeg.producer) {
+    xmlObj.configuration.ffmpeg = {
+      producer: {
+        'auto-deinterlace': config.ffmpeg.producer.autoDeinterlace || 'interlaced',
+        threads: config.ffmpeg.producer.threads || 4,
+      },
+    }
+  }
+
+  if (config.html) {
+    xmlObj.configuration.html = {
+      'remote-debugging-port': config.html.remoteDebuggingPort || 0,
+      'enable-gpu': config.html.enableGpu ? 'true' : 'false',
+      'angle-backend': config.html.angleBackend || 'gl',
+    }
+    if (config.html.cachePath) {
+      xmlObj.configuration.html['cache-path'] = config.html.cachePath
+    }
+  }
+
+  if (config.ndi) {
+    xmlObj.configuration.ndi = {
+      'auto-load': config.ndi.autoLoad ? 'true' : 'false',
+    }
+  }
+
+  if (config.systemAudio && config.systemAudio.producer) {
+    xmlObj.configuration['system-audio'] = {
+      producer: {},
+    }
+    if (config.systemAudio.producer.defaultDeviceName) {
+      xmlObj.configuration['system-audio'].producer['default-device-name'] = config.systemAudio.producer.defaultDeviceName
+    }
+  }
+
+  xmlObj.configuration['log-align-columns'] = config.logAlignColumns ? 'true' : 'false'
+
   return builder.buildObject(xmlObj)
 }
 
@@ -493,7 +678,7 @@ function buildChannelXml(ch) {
         channel.consumers.screen.push(buildScreenXml(consumer.config))
         break
       case 'system-audio':
-        channel.consumers['system-audio'] = ''
+        channel.consumers['system-audio'] = buildSystemAudioXml(consumer.config)
         break
       case 'decklink':
         if (!channel.consumers.decklink) channel.consumers.decklink = []
@@ -551,6 +736,30 @@ function buildScreenXml(config) {
   return Object.keys(screen).length > 0 ? screen : ''
 }
 
+function buildSystemAudioXml(config) {
+  if (!config || Object.keys(config).length === 0) return ''
+  const sysAudio = {}
+  if (config.channelLayout && config.channelLayout !== 'stereo') {
+    sysAudio['channel-layout'] = config.channelLayout
+  }
+  if (config.latency && config.latency !== 200) {
+    sysAudio.latency = config.latency
+  }
+  return Object.keys(sysAudio).length > 0 ? sysAudio : ''
+}
+
+function buildSubregionXml(subregion) {
+  if (!subregion) return null
+  const sr = {}
+  if (subregion.srcX) sr['src-x'] = subregion.srcX
+  if (subregion.srcY) sr['src-y'] = subregion.srcY
+  if (subregion.destX) sr['dest-x'] = subregion.destX
+  if (subregion.destY) sr['dest-y'] = subregion.destY
+  if (subregion.width) sr.width = subregion.width
+  if (subregion.height) sr.height = subregion.height
+  return Object.keys(sr).length > 0 ? sr : null
+}
+
 function buildDecklinkXml(config) {
   const dl = {
     device: config.device || 1,
@@ -566,6 +775,32 @@ function buildDecklinkXml(config) {
   if (config.colorSpace) dl['color-space'] = config.colorSpace
   if (config.waitForReference !== 'auto') dl['wait-for-reference'] = config.waitForReference
   if (config.waitForReferenceDuration !== 10) dl['wait-for-reference-duration'] = config.waitForReferenceDuration
+
+  const subregion = buildSubregionXml(config.subregion)
+  if (subregion) dl.subregion = subregion
+
+  if (config.hdrMetadata) {
+    dl['hdr-metadata'] = {
+      'max-cll': config.hdrMetadata.maxCll,
+      'max-fall': config.hdrMetadata.maxFall,
+      'min-dml': config.hdrMetadata.minDml,
+      'max-dml': config.hdrMetadata.maxDml,
+    }
+  }
+
+  if (config.ports && config.ports.length > 0) {
+    dl.ports = {
+      port: config.ports.map((p) => {
+        const port = { device: p.device || 1 }
+        if (p.keyOnly) port['key-only'] = 'true'
+        if (p.videoMode) port['video-mode'] = p.videoMode
+        const portSubregion = buildSubregionXml(p.subregion)
+        if (portSubregion) port.subregion = portSubregion
+        return port
+      }),
+    }
+  }
+
   return dl
 }
 
@@ -593,6 +828,41 @@ function buildBluefishXml(config) {
     watchdog: config.watchdog || 2,
     'uhd-mode': config.uhdMode || 0,
   }
+}
+
+function buildAudioXml(audio) {
+  const result = {}
+
+  if (audio.channelLayouts && audio.channelLayouts.length > 0) {
+    result['channel-layouts'] = {
+      'channel-layout': audio.channelLayouts.map((l) => ({
+        $: { name: l.name },
+        type: l.type,
+        'num-channels': l.numChannels,
+        channels: l.channels,
+      })),
+    }
+  }
+
+  if (audio.mixConfigs && audio.mixConfigs.length > 0) {
+    result['mix-configs'] = {
+      'mix-config': audio.mixConfigs.map((mc) => {
+        const mixConfig = {
+          from: mc.from,
+          to: mc.to,
+          mix: mc.mix,
+        }
+        if (mc.mappings && mc.mappings.length > 0) {
+          mixConfig.mappings = {
+            mapping: mc.mappings,
+          }
+        }
+        return mixConfig
+      }),
+    }
+  }
+
+  return result
 }
 
 function buildArtnetXml(config) {
@@ -631,6 +901,7 @@ export {
   COLOR_SPACE_OPTIONS,
   PIXEL_FORMAT_OPTIONS,
   AUTO_DEINTERLACE_OPTIONS,
+  CHANNEL_LAYOUT_OPTIONS,
   getDefaultConfig,
   parseXmlToConfig,
   configToXml,

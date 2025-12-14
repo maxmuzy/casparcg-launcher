@@ -111,6 +111,72 @@ const mutations = {
     state.config = getDefaultConfig()
     state.isDirty = true
   },
+
+  ADD_CHANNEL_LAYOUT(state, layout) {
+    if (!state.config.audio) {
+      state.config.audio = { channelLayouts: [], mixConfigs: [] }
+    }
+    state.config.audio.channelLayouts.push(layout)
+    state.isDirty = true
+  },
+
+  REMOVE_CHANNEL_LAYOUT(state, index) {
+    state.config.audio.channelLayouts.splice(index, 1)
+    state.isDirty = true
+  },
+
+  UPDATE_CHANNEL_LAYOUT(state, { index, layout }) {
+    state.config.audio.channelLayouts[index] = layout
+    state.isDirty = true
+  },
+
+  ADD_MIX_CONFIG(state, mixConfig) {
+    if (!state.config.audio) {
+      state.config.audio = { channelLayouts: [], mixConfigs: [] }
+    }
+    state.config.audio.mixConfigs.push(mixConfig)
+    state.isDirty = true
+  },
+
+  REMOVE_MIX_CONFIG(state, index) {
+    state.config.audio.mixConfigs.splice(index, 1)
+    state.isDirty = true
+  },
+
+  UPDATE_MIX_CONFIG(state, { index, mixConfig }) {
+    state.config.audio.mixConfigs[index] = mixConfig
+    state.isDirty = true
+  },
+
+  ADD_CUSTOM_VIDEO_MODE(state, mode) {
+    state.config.customVideoModes.push(mode)
+    state.isDirty = true
+  },
+
+  REMOVE_CUSTOM_VIDEO_MODE(state, index) {
+    state.config.customVideoModes.splice(index, 1)
+    state.isDirty = true
+  },
+
+  UPDATE_CUSTOM_VIDEO_MODE(state, { index, mode }) {
+    state.config.customVideoModes[index] = mode
+    state.isDirty = true
+  },
+
+  ADD_TEMPLATE_HOST(state, host) {
+    state.config.templateHosts.push(host)
+    state.isDirty = true
+  },
+
+  REMOVE_TEMPLATE_HOST(state, index) {
+    state.config.templateHosts.splice(index, 1)
+    state.isDirty = true
+  },
+
+  UPDATE_TEMPLATE_HOST(state, { index, host }) {
+    state.config.templateHosts[index] = host
+    state.isDirty = true
+  },
 }
 
 const actions = {
@@ -181,6 +247,54 @@ const actions = {
   resetConfig({ commit }) {
     commit('RESET_CONFIG')
   },
+
+  addChannelLayout({ commit }, layout) {
+    commit('ADD_CHANNEL_LAYOUT', layout)
+  },
+
+  removeChannelLayout({ commit }, index) {
+    commit('REMOVE_CHANNEL_LAYOUT', index)
+  },
+
+  updateChannelLayout({ commit }, { index, layout }) {
+    commit('UPDATE_CHANNEL_LAYOUT', { index, layout })
+  },
+
+  addMixConfig({ commit }, mixConfig) {
+    commit('ADD_MIX_CONFIG', mixConfig)
+  },
+
+  removeMixConfig({ commit }, index) {
+    commit('REMOVE_MIX_CONFIG', index)
+  },
+
+  updateMixConfig({ commit }, { index, mixConfig }) {
+    commit('UPDATE_MIX_CONFIG', { index, mixConfig })
+  },
+
+  addCustomVideoMode({ commit }, mode) {
+    commit('ADD_CUSTOM_VIDEO_MODE', mode)
+  },
+
+  removeCustomVideoMode({ commit }, index) {
+    commit('REMOVE_CUSTOM_VIDEO_MODE', index)
+  },
+
+  updateCustomVideoMode({ commit }, { index, mode }) {
+    commit('UPDATE_CUSTOM_VIDEO_MODE', { index, mode })
+  },
+
+  addTemplateHost({ commit }, host) {
+    commit('ADD_TEMPLATE_HOST', host)
+  },
+
+  removeTemplateHost({ commit }, index) {
+    commit('REMOVE_TEMPLATE_HOST', index)
+  },
+
+  updateTemplateHost({ commit }, { index, host }) {
+    commit('UPDATE_TEMPLATE_HOST', { index, host })
+  },
 }
 
 const getters = {
@@ -193,6 +307,9 @@ const getters = {
   paths: (state) => state.config.paths,
   controllers: (state) => state.config.controllers,
   osc: (state) => state.config.osc,
+  audio: (state) => state.config.audio || { channelLayouts: [], mixConfigs: [] },
+  customVideoModes: (state) => state.config.customVideoModes || [],
+  templateHosts: (state) => state.config.templateHosts || [],
 }
 
 export default {

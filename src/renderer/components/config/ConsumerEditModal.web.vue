@@ -13,6 +13,7 @@
       <ffmpeg-form v-else-if="consumer.type === 'ffmpeg'" :config="localConfig" @update="updateConfig" />
       <bluefish-form v-else-if="consumer.type === 'bluefish'" :config="localConfig" @update="updateConfig" />
       <artnet-form v-else-if="consumer.type === 'artnet'" :config="localConfig" @update="updateConfig" />
+      <system-audio-form v-else-if="consumer.type === 'system-audio'" :config="localConfig" @update="updateConfig" />
       <p v-else class="text-muted">No configuration options for this consumer type</p>
     </template>
   </b-modal>
@@ -25,6 +26,7 @@ import NdiForm from './consumers/NdiForm.web.vue'
 import FfmpegForm from './consumers/FfmpegForm.web.vue'
 import BluefishForm from './consumers/BluefishForm.web.vue'
 import ArtnetForm from './consumers/ArtnetForm.web.vue'
+import SystemAudioForm from './consumers/SystemAudioForm.web.vue'
 
 export default {
   name: 'ConsumerEditModal',
@@ -35,6 +37,7 @@ export default {
     FfmpegForm,
     BluefishForm,
     ArtnetForm,
+    SystemAudioForm,
   },
   props: {
     show: Boolean,

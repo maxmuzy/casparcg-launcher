@@ -27,11 +27,20 @@
       <b-tab title="Channels">
         <channels-configuration />
       </b-tab>
+      <b-tab title="Audio">
+        <audio-configuration />
+      </b-tab>
       <b-tab title="Controllers">
         <controllers-configuration />
       </b-tab>
       <b-tab title="OSC">
         <osc-configuration />
+      </b-tab>
+      <b-tab title="Video Modes">
+        <custom-video-modes />
+      </b-tab>
+      <b-tab title="Templates">
+        <template-hosts />
       </b-tab>
       <b-tab title="Advanced">
         <advanced-settings />
@@ -70,6 +79,9 @@ import ChannelsConfiguration from './ChannelsConfiguration.web.vue'
 import ControllersConfiguration from './ControllersConfiguration.web.vue'
 import OscConfiguration from './OSCConfiguration.web.vue'
 import AdvancedSettings from './AdvancedSettings.web.vue'
+import AudioConfiguration from './AudioConfiguration.web.vue'
+import CustomVideoModes from './CustomVideoModes.web.vue'
+import TemplateHosts from './TemplateHosts.web.vue'
 
 export default {
   name: 'CasparCGConfig',
@@ -79,6 +91,9 @@ export default {
     ControllersConfiguration,
     OscConfiguration,
     AdvancedSettings,
+    AudioConfiguration,
+    CustomVideoModes,
+    TemplateHosts,
   },
   data() {
     return {

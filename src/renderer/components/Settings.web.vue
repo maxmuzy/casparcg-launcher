@@ -11,6 +11,8 @@
             </p>
           </b-alert>
 
+          <windows-service-control class="mb-4" />
+
           <legend>Processes</legend>
           <b-form-group
             id="basePathInputGroup"
@@ -97,9 +99,14 @@
 </template>
 
 <script>
+import WindowsServiceControl from './config/WindowsServiceControl.web.vue'
+
 const packageJson = require('../../../package.json')
 
 export default {
+  components: {
+    WindowsServiceControl,
+  },
   data() {
     return {
       version: packageJson.version,
