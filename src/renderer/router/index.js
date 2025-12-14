@@ -11,6 +11,11 @@ export default new Router({
       component: require('../components/Settings').default,
     },
     {
+      path: '/casparcg-config',
+      name: 'casparcg-config-page',
+      component: require('../components/config/CasparCGConfig').default,
+    },
+    {
       path: '/:id',
       name: 'process-page',
       component: require('../components/ProcessTab').default,

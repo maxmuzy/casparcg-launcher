@@ -11,6 +11,9 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
+        <b-nav-item to="/casparcg-config">
+          CasparCG Config
+        </b-nav-item>
         <b-nav-item to="/settings" right>
           Settings
         </b-nav-item>
