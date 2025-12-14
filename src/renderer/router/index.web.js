@@ -11,6 +11,11 @@ export default new Router({
       component: require('../components/Settings.web.vue').default,
     },
     {
+      path: '/casparcg-config',
+      name: 'casparcg-config',
+      component: require('../components/config/CasparCGConfig.web.vue').default,
+    },
+    {
       path: '/:id',
       name: 'process-page',
       component: require('../components/ProcessTab.web.vue').default,
