@@ -84,7 +84,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { VIDEO_MODES, COLOR_SPACE_OPTIONS } from '../../utils/casparcgConfigParser'
-import ConsumersConfiguration from './ConsumersConfiguration.web.vue'
+import ConsumersConfiguration from './ConsumersConfiguration.vue'
 
 export default {
   name: 'ChannelsConfiguration',

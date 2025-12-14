@@ -48,7 +48,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import ConsumerEditModal from './ConsumerEditModal.web.vue'
+import ConsumerEditModal from './ConsumerEditModal.vue'
 
 export default {
   name: 'ConsumersConfiguration',

@@ -74,14 +74,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { parseXmlToConfig, configToXml } from '../../utils/casparcgConfigParser'
-import PathsConfiguration from './PathsConfiguration.web.vue'
-import ChannelsConfiguration from './ChannelsConfiguration.web.vue'
-import ControllersConfiguration from './ControllersConfiguration.web.vue'
-import OscConfiguration from './OSCConfiguration.web.vue'
-import AdvancedSettings from './AdvancedSettings.web.vue'
-import AudioConfiguration from './AudioConfiguration.web.vue'
-import CustomVideoModes from './CustomVideoModes.web.vue'
-import TemplateHosts from './TemplateHosts.web.vue'
+import PathsConfiguration from './PathsConfiguration.vue'
+import ChannelsConfiguration from './ChannelsConfiguration.vue'
+import ControllersConfiguration from './ControllersConfiguration.vue'
+import OscConfiguration from './OSCConfiguration.vue'
+import AdvancedSettings from './AdvancedSettings.vue'
+import AudioConfiguration from './AudioConfiguration.vue'
+import CustomVideoModes from './CustomVideoModes.vue'
+import TemplateHosts from './TemplateHosts.vue'
 
 export default {
   name: 'CasparCGConfig',

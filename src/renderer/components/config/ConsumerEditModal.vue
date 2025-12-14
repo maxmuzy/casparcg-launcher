@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import ScreenForm from './consumers/ScreenForm.web.vue'
-import DecklinkForm from './consumers/DecklinkForm.web.vue'
-import NdiForm from './consumers/NdiForm.web.vue'
-import FfmpegForm from './consumers/FfmpegForm.web.vue'
-import BluefishForm from './consumers/BluefishForm.web.vue'
-import ArtnetForm from './consumers/ArtnetForm.web.vue'
-import SystemAudioForm from './consumers/SystemAudioForm.web.vue'
+import ScreenForm from './consumers/ScreenForm.vue'
+import DecklinkForm from './consumers/DecklinkForm.vue'
+import NdiForm from './consumers/NdiForm.vue'
+import FfmpegForm from './consumers/FfmpegForm.vue'
+import BluefishForm from './consumers/BluefishForm.vue'
+import ArtnetForm from './consumers/ArtnetForm.vue'
+import SystemAudioForm from './consumers/SystemAudioForm.vue'
 
 export default {
   name: 'ConsumerEditModal',
