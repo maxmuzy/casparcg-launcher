@@ -1,0 +1,63 @@
+yarn run v1.22.22
+$ node .electron-vue/build.js && electron-builder
+ ___              __                        __                       ___       __
+/\_ \       __   /\ \__     ____           /\ \       __  __   __   /\_ \     /\ \
+\//\ \    / ,.`\ \ \ ,_\   / ,__\  _______ \ \ \____ /\ \/\ \ /\_\  \//\ \    \_\ \
+  \_\ \_ /\  __/  \ \ \/  /\__, `\/\______\ \ \  ,. \\ \ \_\ \\/\ \   \_\ \_ /\ ,. \
+  /\____\\ \____\  \ \ \_ \/\____/\/______/  \ \____/ \ \____/ \ \ \  /\____\\ \____\
+  \/____/ \/____/   \ \__\ \/___/             \/___/   \/___/   \/_/  \/____/ \/___ /
+                     \/__/
+
+  | building main process
+  | building renderer process
+Error: error:0308010C:digital envelope routines::unsupported
+    at new Hash (node:internal/crypto/hash:79:19)
+    at Object.createHash (node:crypto:139:10)
+    at module.exports (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\util\createHash.js:135:53)
+    at NormalModule._initBuildHash (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:417:16)
+    at handleParseError (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:471:10)
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:503:5
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:358:12
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:373:3
+    at iterateNormalLoaders (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:214:10)
+    at iterateNormalLoaders (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:221:10)
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:236:3
+    at runSyncOrAsync (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:130:11)
+    at iterateNormalLoaders (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:232:2)
+    at Array.<anonymous> (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:205:4)
+    at Storage.finished (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\node_modules\enhanced-resolve\lib\CachedInputFileSystem.js:55:16)
+  / building main process
+  / building renderer process
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+node:internal/crypto/hash:79
+  this[kHandle] = new _Hash(algorithm, xofLen, algorithmId, getHashCache());
+                  ^
+
+Error: error:0308010C:digital envelope routines::unsupported
+    at new Hash (node:internal/crypto/hash:79:19)
+    at Object.createHash (node:crypto:139:10)
+    at module.exports (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\util\createHash.js:135:53)
+    at NormalModule._initBuildHash (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:417:16)
+    at handleParseError (C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:471:10)
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:503:5
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\webpack\lib\NormalModule.js:358:12
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:373:3
+    at iterateNormalLoaders (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:214:10)
+    at iterateNormalLoaders (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:221:10)
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:236:3
+    at context.callback (C:\Desenvolvimento\casparcg-launcher\node_modules\loader-runner\lib\LoaderRunner.js:111:13)
+    at C:\Desenvolvimento\casparcg-launcher\node_modules\babel-loader\lib\index.js:59:71
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  opensslErrorStack: [
+    'error:03000086:digital envelope routines::initialization error',
+    'error:0308010C:digital envelope routines::unsupported'
+  ],
+  library: 'digital envelope routines',
+  reason: 'unsupported',
+  code: 'ERR_OSSL_EVP_UNSUPPORTED'
+}
+
+Node.js v20.17.0
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
