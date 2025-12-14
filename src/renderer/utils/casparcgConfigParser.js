@@ -218,6 +218,11 @@ function parseXmlToConfig(xmlString) {
           config.ndi.autoLoad = xmlConfig.ndi['auto-load'] === 'true'
         }
 
+        if (xmlConfig['system-audio'] && xmlConfig['system-audio'].producer) {
+          config.systemAudio.producer.defaultDeviceName =
+            xmlConfig['system-audio'].producer['default-device-name'] || ''
+        }
+
         if (xmlConfig.osc) {
           config.osc.defaultPort = parseInt(xmlConfig.osc['default-port']) || 6250
           config.osc.disableSendToAmcpClients = xmlConfig.osc['disable-send-to-amcp-clients'] === 'true'
