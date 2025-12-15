@@ -170,7 +170,8 @@ if (process.env.NODE_ENV === 'production') {
   rendererConfig.devtool = ''
 
   rendererConfig.plugins.push(
-    new MinifyPlugin(),
+    // MinifyPlugin disabled due to incompatibility with Node.js 17+
+    // new MinifyPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         {

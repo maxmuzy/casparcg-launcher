@@ -73,7 +73,8 @@ if (process.env.NODE_ENV !== 'production') {
  */
 if (process.env.NODE_ENV === 'production') {
   mainConfig.plugins.push(
-    new MinifyPlugin(),
+    // MinifyPlugin disabled due to incompatibility with Node.js 17+
+    // new MinifyPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     })
