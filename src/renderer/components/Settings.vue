@@ -3,8 +3,6 @@
     <b-form @submit="onSubmit" @reset="onReset">
       <b-row>
         <b-col id="content">
-          <windows-service-control class="mb-4" />
-
           <legend>Processes</legend>
           <b-form-group
             id="basePathInputGroup"
@@ -326,12 +324,8 @@
 <script>
 const { ipcRenderer } = require('electron')
 const packageJson = require('../../../package.json')
-import WindowsServiceControl from './config/WindowsServiceControl.vue'
 
 export default {
-  components: {
-    WindowsServiceControl,
-  },
   data() {
     return {
       version: packageJson.version,
