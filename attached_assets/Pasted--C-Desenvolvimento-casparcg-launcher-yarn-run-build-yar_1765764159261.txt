@@ -1,0 +1,499 @@
+
+C:\Desenvolvimento\casparcg-launcher>yarn run build
+yarn run v1.22.22
+$ cross-env NODE_OPTIONS=--openssl-legacy-provider node .electron-vue/build.js && electron-builder
+ ___              __                        __                       ___       __
+/\_ \       __   /\ \__     ____           /\ \       __  __   __   /\_ \     /\ \
+\//\ \    / ,.`\ \ \ ,_\   / ,__\  _______ \ \ \____ /\ \/\ \ /\_\  \//\ \    \_\ \
+  \_\ \_ /\  __/  \ \ \/  /\__, `\/\______\ \ \  ,. \\ \ \_\ \\/\ \   \_\ \_ /\ ,. \
+  /\____\\ \____\  \ \ \_ \/\____/\/______/  \ \____/ \ \____/ \ \ \  /\____\\ \____\
+  \/____/ \/____/   \ \__\ \/___/             \/___/   \/___/   \/_/  \/____/ \/___ /
+                     \/__/
+
+  / building main process
+  / building renderer process
+  | building main process
+  | building renderer process
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+411 │ @import '../../../node_modules/bootstrap/scss/bootstrap';
+    │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    stdin 411:9  root stylesheet
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+412 │ @import '../../../node_modules/bootstrap/scss/_variables';
+    │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+  √ building main process
+  / building renderer process
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+8 │ @import "functions";
+  │         ^^^^^^^^^^^
+  ╵
+    node_modules\bootstrap\scss\bootstrap.scss 8:9  @import
+    stdin 411:9                                     root stylesheet
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+9 │ @import "variables";
+  │         ^^^^^^^^^^^
+  ╵
+    node_modules\bootstrap\scss\bootstrap.scss 9:9  @import
+    stdin 411:9                                     root stylesheet
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+10 │ @import "mixins";
+   │         ^^^^^^^^
+   ╵
+    node_modules\bootstrap\scss\bootstrap.scss 10:9  @import
+    stdin 411:9                                      root stylesheet
+
+Deprecation Warning [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($level > 0): $black; else: $white)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+100 │   $color-base: if($level > 0, $black, $white);
+    │                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_functions.scss 100:16  @import
+    node_modules\bootstrap\scss\bootstrap.scss 8:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($return-calc == true): calc(#{$value1} + #{$value2}); else: $value1 + unquote(" + ") + $value2)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+120 │   @return if($return-calc == true, calc(#{$value1} + #{$value2}), $value1 + unquote(" + ") + $value2);
+    │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_functions.scss 120:11  @import
+    node_modules\bootstrap\scss\bootstrap.scss 8:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($return-calc == true): calc(#{$value1} - #{$value2}); else: $value1 + unquote(" - ") + $value2)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+140 │   @return if($return-calc == true, calc(#{$value1} - #{$value2}), $value1 + unquote(" - ") + $value2);
+    │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_functions.scss 140:11  @import
+    node_modules\bootstrap\scss\bootstrap.scss 8:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+22 │   $grays: map-merge(
+   │ ┌─────────^
+23 │ │   (
+24 │ │     "100": $gray-100,
+25 │ │     "200": $gray-200,
+26 │ │     "300": $gray-300,
+27 │ │     "400": $gray-400,
+28 │ │     "500": $gray-500,
+29 │ │     "600": $gray-600,
+30 │ │     "700": $gray-700,
+31 │ │     "800": $gray-800,
+32 │ │     "900": $gray-900
+33 │ │   ),
+34 │ │   $grays
+35 │ │ );
+   │ └─^
+   ╵
+    node_modules\bootstrap\scss\_variables.scss 22:9  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9    @import
+    stdin 411:9                                       root stylesheet
+
+Deprecation Warning [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+50 │   $colors: map-merge(
+   │ ┌──────────^
+51 │ │   (
+52 │ │     "blue":       $blue,
+53 │ │     "indigo":     $indigo,
+54 │ │     "purple":     $purple,
+55 │ │     "pink":       $pink,
+56 │ │     "red":        $red,
+57 │ │     "orange":     $orange,
+58 │ │     "yellow":     $yellow,
+59 │ │     "green":      $green,
+60 │ │     "teal":       $teal,
+61 │ │     "cyan":       $cyan,
+62 │ │     "white":      $white,
+63 │ │     "gray":       $gray-600,
+64 │ │     "gray-dark":  $gray-800
+65 │ │   ),
+66 │ │   $colors
+67 │ │ );
+   │ └─^
+   ╵
+    node_modules\bootstrap\scss\_variables.scss 50:10  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9     @import
+    stdin 411:9                                        root stylesheet
+
+Deprecation Warning [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+80 │   $theme-colors: map-merge(
+   │ ┌────────────────^
+81 │ │   (
+82 │ │     "primary":    $primary,
+83 │ │     "secondary":  $secondary,
+84 │ │     "success":    $success,
+85 │ │     "info":       $info,
+86 │ │     "warning":    $warning,
+87 │ │     "danger":     $danger,
+88 │ │     "light":      $light,
+89 │ │     "dark":       $dark
+90 │ │   ),
+91 │ │   $theme-colors
+92 │ │ );
+   │ └─^
+   ╵
+    node_modules\bootstrap\scss\_variables.scss 80:16  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9     @import
+    stdin 411:9                                        root stylesheet
+
+Deprecation Warning [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+142 │   $spacers: map-merge(
+    │ ┌───────────^
+143 │ │   (
+144 │ │     0: 0,
+145 │ │     1: ($spacer * .25),
+146 │ │     2: ($spacer * .5),
+147 │ │     3: $spacer,
+148 │ │     4: ($spacer * 1.5),
+149 │ │     5: ($spacer * 3)
+150 │ │   ),
+151 │ │   $spacers
+152 │ │ );
+    │ └─^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 142:11  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+157 │   $sizes: map-merge(
+    │ ┌─────────^
+158 │ │   (
+159 │ │     25: 25%,
+160 │ │     50: 50%,
+161 │ │     75: 75%,
+162 │ │     100: 100%,
+163 │ │     auto: auto
+164 │ │   ),
+165 │ │   $sizes
+166 │ │ );
+    │ └─^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 157:9  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9     @import
+    stdin 411:9                                        root stylesheet
+
+Deprecation Warning [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -30%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+183 │ $link-hover-color:                        darken($link-color, 15%) !default;
+    │                                           ^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 183:43  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($spacer, 2) or calc($spacer / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+308 │ $headings-margin-bottom:      $spacer / 2 !default;
+    │                               ^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 308:31  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 9.7081218274%)
+color.adjust($color, $lightness: 7.5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+378 │ $table-dark-border-color:     lighten($table-dark-bg, 7.5%) !default;
+    │                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 378:31  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 50%)
+color.adjust($color, $lightness: 25%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+491 │ $input-focus-border-color:              lighten($component-active-bg, 25%) !default;
+    │                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 491:41  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($input-padding-y, 2) or calc($input-padding-y / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+503 │ $input-height-inner-quarter:            add($input-line-height * .25em, $input-padding-y / 2) !default;
+    │                                                                         ^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 503:73  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 70%)
+color.adjust($color, $lightness: 35%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+556 │ $custom-control-indicator-active-bg:            lighten($component-active-bg, 35%) !default;
+    │                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 556:49  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($custom-control-indicator-size, 2) or calc($custom-control-indicator-size / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+573 │ $custom-switch-indicator-border-radius:         $custom-control-indicator-size / 2 !default;
+    │                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 573:49  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 70%)
+color.adjust($color, $lightness: 35%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+631 │ $custom-range-thumb-active-bg:               lighten($component-active-bg, 35%) !default;
+    │                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 631:46  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($spacer, 2) or calc($spacer / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+719 │ $nav-divider-margin-y:              $spacer / 2 !default;
+    │                                     ^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 719:37  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($spacer, 2) or calc($spacer / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+724 │ $navbar-padding-y:                  $spacer / 2 !default;
+    │                                     ^^^^^^^^^^^
+    ╵
+    node_modules\bootstrap\scss\_variables.scss 724:37  @import
+    node_modules\bootstrap\scss\bootstrap.scss 9:9      @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass(type-of($fs) == "number"): unit($fs); else: false)
+
+More info: https://sass-lang.com/d/if-function
+
+   ╷
+66 │   $fs-unit: if(type-of($fs) == "number", unit($fs), false);
+   │             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    node_modules\bootstrap\scss\vendor\_rfs.scss 66:13  @import
+    node_modules\bootstrap\scss\_mixins.scss 6:9        @import
+    node_modules\bootstrap\scss\bootstrap.scss 10:9     @import
+    stdin 411:9                                         root stylesheet
+
+Deprecation Warning [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($important): " !important"; else: "")
+
+More info: https://sass-lang.com/d/if-function
+
+   ╷
+69 │   $rfs-suffix: if($important, " !important", "");
+   │                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    node_modules\bootstrap\scss\vendor\_rfs.scss 69:16  @import
+    node_modules\bootstrap\scss\_mixins.scss 6:9        @import
+    node_modules\bootstrap\scss\bootstrap.scss 10:9     @import
+  √ building main process
+  - building renderer process
+  √ building main process
+  \ building renderer process
+
+   ERROR  failed to build renderer process
+
+    Hash: 99cc8f53db5b732d9c55
+    Version: webpack 4.43.0
+    Time: 8617ms
+    Built at: 14/12/2025 23:02:33
+                    Asset      Size  Chunks  Chunk Names
+              renderer.js  1.13 MiB       0  renderer
+          static/.gitkeep   0 bytes
+    static/directory.html  4.77 KiB
+    Entrypoint renderer = renderer.js
+     [0] ./node_modules/vue-loader/lib/runtime/componentNormalizer.js 2.71 KiB {0} [built]
+     [1] external "vuex" 42 bytes {0} [built]
+     [3] ./node_modules/vue/dist/vue.esm.js 319 KiB {0} [built]
+     [5] ./node_modules/vue-style-loader/lib/addStylesClient.js + 1 modules 6.71 KiB {0} [built]
+         | ./node_modules/vue-style-loader/lib/addStylesClient.js 6.09 KiB [built]
+         | ./node_modules/vue-style-loader/lib/listToStyles.js 637 bytes [built]
+     [6] external "electron" 42 bytes {0} [built]
+    [24] ./src/renderer/store/modules/index.js 235 bytes {0} [built]
+    [25] external "vue-router" 42 bytes {0} [built]
+    [27] ./node_modules/bootstrap-vue/esm/bv-config.js 160 bytes [built]
+    [28] ./node_modules/bootstrap-vue/esm/icons/plugin.js 52.5 KiB [built]
+    [29] external "vue-chat-scroll" 42 bytes {0} [built]
+    [30] external "smoothscroll-polyfill" 42 bytes {0} [built]
+    [32] ./node_modules/bootstrap/dist/css/bootstrap.css 440 bytes {0} [built]
+    [34] ./node_modules/bootstrap-vue/dist/bootstrap-vue.css 438 bytes {0} [built]
+    [54] external "vue-electron" 42 bytes {0} [built]
+    [55] ./src/renderer/main.js + 289 modules 1.44 MiB {0} [built] [1 error]
+         | ./src/renderer/main.js 914 bytes [built] [1 error]
+         | ./node_modules/bootstrap-vue/esm/index.js 15.3 KiB [built]
+         | ./src/renderer/App.vue 510 bytes [built]
+         | ./src/renderer/router/index.js 622 bytes [built]
+         | ./src/renderer/store/index.js 199 bytes [built]
+         | ./node_modules/bootstrap-vue/esm/utils/plugins.js 6.47 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/components/button/button-close.js 2.24 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/components/alert/alert.js 5.03 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/components/alert/index.js 208 bytes [built]
+         | ./node_modules/bootstrap-vue/esm/components/aspect/aspect.js 3.38 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/components/aspect/index.js 215 bytes [built]
+         | ./node_modules/bootstrap-vue/esm/components/link/link.js 9.25 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/components/button/button.js 8.03 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/icons/icons.js 328 KiB [built]
+         | ./node_modules/bootstrap-vue/esm/icons/icon.js 2.44 KiB [built]
+         |     + 275 hidden modules
+        + 45 hidden modules
+
+    ERROR in ./src/renderer/main.js
+    Module Error (from ./node_modules/eslint-loader/dist/cjs.js):
+
+    C:\Desenvolvimento\casparcg-launcher\src\renderer\main.js
+      8:8  error  "font-awesome/css/font-awesome.css" is not found  node/no-missing-import
+
+    ✖ 1 problem (1 error, 0 warnings)
+
+
+    ERROR in ./src/renderer/main.js
+    Module not found: Error: Can't resolve 'font-awesome/css/font-awesome.css' in 'C:\Desenvolvimento\casparcg-launcher\src\renderer'
+     @ ./src/renderer/main.js 7:0-43
+    Child HtmlWebpackCompiler:
+                              Asset      Size  Chunks  Chunk Names
+        __child-HtmlWebpackPlugin_0  4.84 KiB       0  HtmlWebpackPlugin_0
+                    static/.gitkeep   0 bytes
+              static/directory.html  4.77 KiB
+        Entrypoint HtmlWebpackPlugin_0 = __child-HtmlWebpackPlugin_0
+        [0] ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.ejs 1.25 KiB {0} [built]
+
+
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+C:\Desenvolvimento\casparcg-launcher>
