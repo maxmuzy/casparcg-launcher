@@ -218,6 +218,42 @@ function startupProcesses() {
     e.sender.send('config', config.store)
   })
 
+  wrapper.on('casparcg.config.get', (e) => {
+    try {
+      const configPath = path.join(getBasePath(config), 'casparcg.config')
+      if (fs.existsSync(configPath)) {
+        const content = fs.readFileSync(configPath, 'utf8')
+        e.sender.send('casparcg.config.get', content)
+      } else {
+        e.sender.send('casparcg.config.get', null)
+      }
+    } catch (err) {
+      log.error('Failed to read casparcg.config:', err)
+      e.sender.send('casparcg.config.get', null)
+    }
+  })
+
+  wrapper.on('casparcg.config.set', (e, xmlContent) => {
+    try {
+      const configPath = path.join(getBasePath(config), 'casparcg.config')
+      fs.writeFileSync(configPath, xmlContent, 'utf8')
+      e.sender.send('casparcg.config.set', { success: true })
+    } catch (err) {
+      log.error('Failed to write casparcg.config:', err)
+      e.sender.send('casparcg.config.set', { success: false, error: err.message })
+    }
+  })
+
+  wrapper.on('casparcg.config.path', (e) => {
+    try {
+      const configPath = path.join(getBasePath(config), 'casparcg.config')
+      e.sender.send('casparcg.config.path', configPath)
+    } catch (err) {
+      log.error('Failed to get casparcg.config path:', err)
+      e.sender.send('casparcg.config.path', null)
+    }
+  })
+
   wrapper.on('processes.get', (e) => {
     const data = config.get('processes', [])
     const procNames = []
