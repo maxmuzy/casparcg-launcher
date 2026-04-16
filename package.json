@@ -80,6 +80,7 @@
     "serve-index": "^1.7.2",
     "smoothscroll-polyfill": "^0.4.3",
     "string-argv": "^0.3.1",
+    "sudo-prompt": "^9.2.1",
     "vue": "^2.5.16",
     "vue-chat-scroll": "^1.2.1",
     "vue-electron": "^1.0.6",

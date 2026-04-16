@@ -9297,6 +9297,11 @@ style-loader@^1.2.1:
     loader-utils "^2.0.0"
     schema-utils "^2.6.6"
 
+sudo-prompt@^9.2.1:
+  version "9.2.1"
+  resolved "https://registry.npmjs.org/sudo-prompt/-/sudo-prompt-9.2.1.tgz"
+  integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
+
 sumchecker@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/sumchecker/-/sumchecker-3.0.1.tgz"

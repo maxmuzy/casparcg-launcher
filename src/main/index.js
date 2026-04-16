@@ -205,12 +205,25 @@ function createWindow() {
   mainWindow.on('close', (e) => {
     if (!isQuitting && trayAvailable) {
       e.preventDefault()
+      mainWindow.setSkipTaskbar(true)
       mainWindow.hide()
       return
     }
     log.info('shutting down')
     stopProcesses()
     httpMonitor.stop()
+  })
+
+  mainWindow.on('minimize', (e) => {
+    if (trayAvailable) {
+      e.preventDefault()
+      mainWindow.setSkipTaskbar(true)
+      mainWindow.hide()
+    }
+  })
+
+  mainWindow.on('show', () => {
+    mainWindow.setSkipTaskbar(false)
   })
 
   mainWindow.on('closed', () => {
@@ -435,7 +448,30 @@ function startupProcesses() {
       wrapper.send(event.replace('windowsService', 'launcherService'), msg)
     },
   }
-  new WindowsServiceManager(launcherServiceIpcWrapper)
+  const launcherServiceManager = new WindowsServiceManager(launcherServiceIpcWrapper)
+
+  // Auto-install as Windows service on first launch (Windows only)
+  if (process.platform === 'win32' && isProduction) {
+    launcherServiceManager.configure({
+      serviceName: 'CasparCGLauncher',
+      displayName: 'CasparCG Launcher',
+      description: 'CasparCG Launcher Windows Service',
+      exePath: process.execPath,
+    })
+    launcherServiceManager.isInstalled().then((installed) => {
+      if (!installed) {
+        log.info('[LauncherService] Service not installed - prompting to install on first launch')
+        launcherServiceManager.install({
+          serviceName: 'CasparCGLauncher',
+          displayName: 'CasparCG Launcher',
+          description: 'CasparCG Launcher Windows Service',
+          exePath: process.execPath,
+        })
+      } else {
+        log.info('[LauncherService] Service already installed')
+      }
+    })
+  }
 
   config.onDidChange('processes', updateProcesses)
   config.onDidChange('basePath', updatePaths)

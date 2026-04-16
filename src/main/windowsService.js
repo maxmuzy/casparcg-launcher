@@ -1,9 +1,21 @@
 import log from 'electron-log'
-import path from 'path'
 import { execFile } from 'child_process'
+import sudo from 'sudo-prompt'
 
 function isValidServiceName(name) {
   return /^[a-zA-Z0-9_\- ]+$/.test(name)
+}
+
+function runElevated(command, name) {
+  return new Promise((resolve, reject) => {
+    sudo.exec(command, { name: name || 'CasparCG Launcher' }, (error, stdout, stderr) => {
+      if (error) {
+        log.error('[WindowsService] Elevated command failed: ' + error.message)
+        return reject(error)
+      }
+      resolve({ stdout: stdout || '', stderr: stderr || '' })
+    })
+  })
 }
 
 export class WindowsServiceManager {
@@ -28,6 +40,7 @@ export class WindowsServiceManager {
           this.stop()
           break
         case 'status':
+          if (param) this.configure(param)
           this.getStatus()
           break
         case 'configure':
@@ -37,9 +50,13 @@ export class WindowsServiceManager {
     })
   }
 
+  sendStatus(status, message) {
+    this.ipcWrapper.send('windowsService.status', JSON.stringify({ status, message }))
+  }
+
   configure(config) {
     this.serviceConfig = config
-    const name = config.serviceName || 'CasparCG'
+    const name = (config && config.serviceName) || 'CasparCG'
     if (!isValidServiceName(name)) {
       log.error('[WindowsService] Invalid service name: ' + name)
       this.sendStatus('error', 'Invalid service name. Only letters, numbers, spaces, hyphens and underscores allowed.')
@@ -49,7 +66,7 @@ export class WindowsServiceManager {
     log.info('[WindowsService] Configured service: ' + this.serviceName)
   }
 
-  install(config) {
+  async install(config) {
     if (config) {
       this.configure(config)
     }
@@ -61,73 +78,56 @@ export class WindowsServiceManager {
 
     const exePath = this.serviceConfig.exePath
     const serviceName = this.serviceName
-    const displayName = this.serviceConfig.displayName || 'CasparCG Server'
-    const description = this.serviceConfig.description || 'CasparCG Server Windows Service'
+    const displayName = this.serviceConfig.displayName || serviceName
+    const description = this.serviceConfig.description || 'CasparCG Launcher Windows Service'
 
     log.info('[WindowsService] Installing service: ' + serviceName)
-    this.sendStatus('installing', 'Installing service...')
+    this.sendStatus('installing', 'Installing service (UAC prompt)...')
+
+    const quotedExe = `\\"${exePath}\\"`
+    const createCmd = `sc.exe create "${serviceName}" binPath= "${quotedExe}" start= auto DisplayName= "${displayName}"`
+    const descCmd = `sc.exe description "${serviceName}" "${description.replace(/"/g, '\\"')}"`
+    const startCmd = `sc.exe start "${serviceName}"`
 
     try {
-      const Service = require('node-windows').Service
-
-      const svc = new Service({
-        name: serviceName,
-        description: description,
-        script: exePath,
-        execPath: exePath,
-        nodeArgs: [],
-        workingDirectory: path.dirname(exePath),
-      })
-
-      svc.on('install', () => {
-        log.info('[WindowsService] Service installed successfully')
-        this.sendStatus('installed', 'Service installed successfully')
-        svc.start()
-      })
-
-      svc.on('alreadyinstalled', () => {
-        log.info('[WindowsService] Service already installed')
-        this.sendStatus('installed', 'Service already installed')
-      })
-
-      svc.on('error', (err) => {
-        log.error('[WindowsService] Error: ' + err)
-        this.sendStatus('error', err.toString())
-      })
-
-      svc.install()
+      const combined = `${createCmd} && ${descCmd} && ${startCmd}`
+      const { stdout, stderr } = await runElevated(combined, 'CasparCG Launcher')
+      log.info('[WindowsService] Install output: ' + stdout)
+      if (stderr) log.warn('[WindowsService] Install stderr: ' + stderr)
+      this.sendStatus('installed', 'Service installed and started successfully')
+      setTimeout(() => this.getStatus(), 1000)
     } catch (err) {
-      log.error('[WindowsService] Install failed: ' + err)
-      this.sendStatus('error', 'Install failed: ' + err.toString())
+      const msg = err && err.message ? err.message : String(err)
+      if (msg.includes('User did not grant permission')) {
+        this.sendStatus('error', 'Administrator permission denied')
+      } else {
+        this.sendStatus('error', 'Install failed: ' + msg)
+      }
     }
   }
 
-  uninstall() {
+  async uninstall() {
     log.info('[WindowsService] Uninstalling service: ' + this.serviceName)
-    this.sendStatus('uninstalling', 'Uninstalling service...')
+    this.sendStatus('uninstalling', 'Uninstalling service (UAC prompt)...')
+
+    const serviceName = this.serviceName
+    const stopCmd = `sc.exe stop "${serviceName}"`
+    const deleteCmd = `sc.exe delete "${serviceName}"`
 
     try {
-      const Service = require('node-windows').Service
-
-      const svc = new Service({
-        name: this.serviceName,
-        script: (this.serviceConfig && this.serviceConfig.exePath) || '',
-      })
-
-      svc.on('uninstall', () => {
-        log.info('[WindowsService] Service uninstalled successfully')
-        this.sendStatus('uninstalled', 'Service uninstalled successfully')
-      })
-
-      svc.on('error', (err) => {
-        log.error('[WindowsService] Error: ' + err)
-        this.sendStatus('error', err.toString())
-      })
-
-      svc.uninstall()
+      const combined = `${stopCmd} & ${deleteCmd}`
+      const { stdout, stderr } = await runElevated(combined, 'CasparCG Launcher')
+      log.info('[WindowsService] Uninstall output: ' + stdout)
+      if (stderr) log.warn('[WindowsService] Uninstall stderr: ' + stderr)
+      this.sendStatus('uninstalled', 'Service uninstalled successfully')
+      setTimeout(() => this.getStatus(), 1000)
     } catch (err) {
-      log.error('[WindowsService] Uninstall failed: ' + err)
-      this.sendStatus('error', 'Uninstall failed: ' + err.toString())
+      const msg = err && err.message ? err.message : String(err)
+      if (msg.includes('User did not grant permission')) {
+        this.sendStatus('error', 'Administrator permission denied')
+      } else {
+        this.sendStatus('error', 'Uninstall failed: ' + msg)
+      }
     }
   }
 
@@ -164,10 +164,11 @@ export class WindowsServiceManager {
   getStatus() {
     execFile('sc', ['query', this.serviceName], (error, stdout, stderr) => {
       if (error) {
-        if (stderr.includes('does not exist') || stdout.includes('does not exist')) {
+        const combined = (stdout || '') + (stderr || '')
+        if (combined.includes('does not exist') || combined.includes('1060')) {
           this.sendStatus('not_installed', 'Service not installed')
         } else {
-          this.sendStatus('unknown', 'Unable to query service status')
+          this.sendStatus('error', 'Status check failed: ' + (stderr || error.message))
         }
         return
       }
@@ -176,22 +177,23 @@ export class WindowsServiceManager {
         this.sendStatus('running', 'Service is running')
       } else if (stdout.includes('STOPPED')) {
         this.sendStatus('stopped', 'Service is stopped')
-      } else if (stdout.includes('PENDING')) {
-        this.sendStatus('pending', 'Service operation pending')
       } else {
-        this.sendStatus('unknown', 'Unknown service status')
+        this.sendStatus('installed', 'Service is installed')
       }
     })
   }
 
-  sendStatus(status, message) {
-    this.ipcWrapper.send(
-      'windowsService.status',
-      JSON.stringify({
-        serviceName: this.serviceName,
-        status: status,
-        message: message,
+  isInstalled() {
+    return new Promise((resolve) => {
+      execFile('sc', ['query', this.serviceName], (error, stdout, stderr) => {
+        if (error) {
+          const combined = (stdout || '') + (stderr || '')
+          if (combined.includes('does not exist') || combined.includes('1060')) {
+            return resolve(false)
+          }
+        }
+        resolve(true)
       })
-    )
+    })
   }
 }
