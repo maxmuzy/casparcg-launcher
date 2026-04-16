@@ -7,6 +7,8 @@ CasparCG Launcher is an Electron desktop application for managing CasparCG Serve
 
 ## Features
 - Process management (Start/Stop/Restart CasparCG and related processes)
+  - **Start Delay**: configurable delay (in seconds) before auto-starting a process
+  - **Dependency Ordering**: processes can depend on another process being running before starting
 - CasparCG Configuration Editor with support for:
   - Paths configuration
   - Channels with video modes, color depth, color space
@@ -19,6 +21,8 @@ CasparCG Launcher is an Electron desktop application for managing CasparCG Serve
   - OSC settings
   - Advanced settings (flash, HTML, thumbnails, etc.)
 - Windows Service Control (install/uninstall CasparCG as Windows service)
+- **Launcher as Windows Service**: install the launcher itself as a Windows service (Settings > Windows Service section)
+- **System Tray**: closing the window minimizes to system tray; double-click tray icon restores; right-click shows "Abrir"/"Fechar" menu
 - Log viewer
 - HTTP API server
 

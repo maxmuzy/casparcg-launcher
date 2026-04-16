@@ -1,6 +1,10 @@
 import log from 'electron-log'
 import path from 'path'
-import { exec } from 'child_process'
+import { execFile } from 'child_process'
+
+function isValidServiceName(name) {
+  return /^[a-zA-Z0-9_\- ]+$/.test(name)
+}
 
 export class WindowsServiceManager {
   constructor(ipcWrapper) {
@@ -35,7 +39,13 @@ export class WindowsServiceManager {
 
   configure(config) {
     this.serviceConfig = config
-    this.serviceName = config.serviceName || 'CasparCG'
+    const name = config.serviceName || 'CasparCG'
+    if (!isValidServiceName(name)) {
+      log.error('[WindowsService] Invalid service name: ' + name)
+      this.sendStatus('error', 'Invalid service name. Only letters, numbers, spaces, hyphens and underscores allowed.')
+      return
+    }
+    this.serviceName = name
     log.info('[WindowsService] Configured service: ' + this.serviceName)
   }
 
@@ -59,7 +69,7 @@ export class WindowsServiceManager {
 
     try {
       const Service = require('node-windows').Service
-      
+
       const svc = new Service({
         name: serviceName,
         description: description,
@@ -101,7 +111,7 @@ export class WindowsServiceManager {
 
       const svc = new Service({
         name: this.serviceName,
-        script: this.serviceConfig?.exePath || '',
+        script: (this.serviceConfig && this.serviceConfig.exePath) || '',
       })
 
       svc.on('uninstall', () => {
@@ -125,7 +135,7 @@ export class WindowsServiceManager {
     log.info('[WindowsService] Starting service: ' + this.serviceName)
     this.sendStatus('starting', 'Starting service...')
 
-    exec(`sc start "${this.serviceName}"`, (error, stdout, stderr) => {
+    execFile('sc', ['start', this.serviceName], (error, stdout, stderr) => {
       if (error) {
         log.error('[WindowsService] Start failed: ' + stderr)
         this.sendStatus('error', 'Start failed: ' + stderr)
@@ -140,7 +150,7 @@ export class WindowsServiceManager {
     log.info('[WindowsService] Stopping service: ' + this.serviceName)
     this.sendStatus('stopping', 'Stopping service...')
 
-    exec(`sc stop "${this.serviceName}"`, (error, stdout, stderr) => {
+    execFile('sc', ['stop', this.serviceName], (error, stdout, stderr) => {
       if (error) {
         log.error('[WindowsService] Stop failed: ' + stderr)
         this.sendStatus('error', 'Stop failed: ' + stderr)
@@ -152,7 +162,7 @@ export class WindowsServiceManager {
   }
 
   getStatus() {
-    exec(`sc query "${this.serviceName}"`, (error, stdout, stderr) => {
+    execFile('sc', ['query', this.serviceName], (error, stdout, stderr) => {
       if (error) {
         if (stderr.includes('does not exist') || stdout.includes('does not exist')) {
           this.sendStatus('not_installed', 'Service not installed')

@@ -211,6 +211,39 @@
                         >
                           <b-form-checkbox :id="'autoStart' + index" v-model="config.processes[index].autoStart" />
                         </b-form-group>
+
+                        <b-form-group
+                          label="Start Delay (seconds)"
+                          :label-for="'startDelay' + index"
+                          label-cols-sm="4"
+                          label-cols-lg="3"
+                          content-cols-sm
+                          content-cols-lg="7"
+                        >
+                          <b-form-input
+                            :id="'startDelay' + index"
+                            v-model="config.processes[index].startDelay"
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                          />
+                        </b-form-group>
+
+                        <b-form-group
+                          label="Depends On"
+                          :label-for="'dependsOn' + index"
+                          label-cols-sm="4"
+                          label-cols-lg="3"
+                          content-cols-sm
+                          content-cols-lg="7"
+                        >
+                          <b-form-select
+                            :id="'dependsOn' + index"
+                            v-model="config.processes[index].dependsOn"
+                            :options="getDependencyOptions(index)"
+                            class="mb-3"
+                          />
+                        </b-form-group>
                       </b-collapse>
                     </b-td>
                   </b-tr>
@@ -308,6 +341,12 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row class="mt-4">
+        <b-col>
+          <legend>Windows Service</legend>
+          <LauncherServiceControl />
+        </b-col>
+      </b-row>
       <b-row id="footer">
         <b-col>
           <b-button type="submit" variant="primary"> Save </b-button>
@@ -324,8 +363,12 @@
 <script>
 const { ipcRenderer } = require('electron')
 const packageJson = require('../../../package.json')
+import LauncherServiceControl from './config/LauncherServiceControl.vue'
 
 export default {
+  components: {
+    LauncherServiceControl,
+  },
   data() {
     return {
       version: packageJson.version,
@@ -402,6 +445,17 @@ export default {
     },
     onRemoveEnvironmentVariable(rowIndex, envIndex) {
       this.config.processes[rowIndex].env.splice(envIndex, 1)
+    },
+    getDependencyOptions(index) {
+      const options = [{ value: '', text: '(None)' }]
+      if (this.config && this.config.processes) {
+        this.config.processes.forEach((proc, i) => {
+          if (i !== index) {
+            options.push({ value: proc.id, text: proc.name || proc.id })
+          }
+        })
+      }
+      return options
     },
   },
 }

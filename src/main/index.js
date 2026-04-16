@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, Tray, Menu, nativeImage } from 'electron'
 import Conf from 'conf'
 import log from 'electron-log'
 import fs from 'fs'
@@ -7,6 +7,7 @@ import OS from 'os'
 
 import { ProcessMonitor } from './process'
 import { HttpMonitor } from './http'
+import { WindowsServiceManager } from './windowsService'
 import { getExeDir, getLogsPath, getBasePath } from './util'
 
 const isProduction = process.env.NODE_ENV !== 'development'
@@ -115,18 +116,83 @@ if (configVersion < 2) {
 }
 
 let mainWindow
+let tray = null
+let isQuitting = false
+let trayAvailable = false
 const winURL = !isProduction ? `http://localhost:9080` : `file://${__dirname}/index.html`
 
+function getTrayIconPath() {
+  if (isProduction) {
+    return path.join(__dirname, '/static/icon.ico')
+  }
+  return path.join(__dirname, '../../build/icons/icon.ico')
+}
+
+function createTray() {
+  if (tray) return
+
+  const iconPath = getTrayIconPath()
+  let trayIcon
+  try {
+    trayIcon = nativeImage.createFromPath(iconPath)
+    if (trayIcon.isEmpty()) {
+      trayIcon = nativeImage.createFromPath(path.join(__dirname, '../../build/icons/256x256.png'))
+    }
+  } catch (e) {
+    log.warn('Failed to load tray icon: ' + e)
+    return
+  }
+
+  tray = new Tray(trayIcon)
+  trayAvailable = true
+  tray.setToolTip('CasparCG Launcher')
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Abrir',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.show()
+          mainWindow.focus()
+        }
+      },
+    },
+    {
+      label: 'Fechar',
+      click: () => {
+        const choice = dialog.showMessageBoxSync(mainWindow, {
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          title: 'Confirm',
+          message: 'Are you sure you want to quit?',
+        })
+        if (choice === 0) {
+          isQuitting = true
+          stopProcesses()
+          httpMonitor.stop()
+          app.quit()
+        }
+      },
+    },
+  ])
+
+  tray.setContextMenu(contextMenu)
+
+  tray.on('double-click', () => {
+    if (mainWindow) {
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+}
+
 function createWindow() {
-  /**
-   * Initial window options
-   */
   mainWindow = new BrowserWindow({
     height: 768,
     useContentSize: true,
     width: !isProduction ? 1600 : 1024,
     webPreferences: {
-      nodeIntegration: true, // TODO This needs to be removed asap
+      nodeIntegration: true,
     },
   })
 
@@ -137,20 +203,14 @@ function createWindow() {
   mainWindow.loadURL(winURL)
 
   mainWindow.on('close', (e) => {
-    if (isProduction) {
-      const choice = dialog.showMessageBoxSync(mainWindow, {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        title: 'Confirm',
-        message: 'Are you sure you want to quit?',
-      })
-
-      if (choice === 1) {
-        e.preventDefault()
-      }
+    if (!isQuitting && trayAvailable) {
+      e.preventDefault()
+      mainWindow.hide()
+      return
     }
-
     log.info('shutting down')
+    stopProcesses()
+    httpMonitor.stop()
   })
 
   mainWindow.on('closed', () => {
@@ -158,8 +218,6 @@ function createWindow() {
     log.info('closed')
   })
 
-  // Block new windows being opened on ctrl/shift/alt+click or middle-click
-  // Note: this does stop navigation too, but is safer than forcing mainWindow to the new url
   mainWindow.webContents.on('new-window', (e, url) => {
     e.preventDefault()
   })
@@ -170,19 +228,24 @@ function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+app.on('before-quit', () => {
+  isQuitting = true
+})
+
+app.on('ready', () => {
+  createWindow()
+  createTray()
+})
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    stopProcesses()
-    httpMonitor.stop()
-    app.quit()
-  }
+  // Do nothing - app stays in tray
 })
 
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
+  } else {
+    mainWindow.show()
   }
 })
 
@@ -277,8 +340,43 @@ function startupProcesses() {
     }
   })
 
+  function startProcessWithDelayAndDependency(procData) {
+    const delay = parseInt(procData.startDelay, 10) || 0
+    const dependsOnId = procData.dependsOn || ''
+
+    function doStart() {
+      if (delay > 0) {
+        log.info(`[${procData.id}] Waiting ${delay}s before auto-start`)
+        setTimeout(() => {
+          if (processes[procData.id]) {
+            processes[procData.id].start()
+          }
+        }, delay * 1000)
+      } else {
+        processes[procData.id].start()
+      }
+    }
+
+    if (dependsOnId && processes[dependsOnId]) {
+      log.info(`[${procData.id}] Waiting for dependency: ${dependsOnId}`)
+      const checkInterval = setInterval(() => {
+        if (processes[dependsOnId] && processes[dependsOnId].running()) {
+          clearInterval(checkInterval)
+          log.info(`[${procData.id}] Dependency ${dependsOnId} is running`)
+          doStart()
+        }
+      }, 500)
+      setTimeout(() => {
+        clearInterval(checkInterval)
+      }, 120000)
+    } else {
+      doStart()
+    }
+  }
+
   function updateProcesses(data, oldData, coldStart = false) {
     const procNames = []
+    const newProcesses = []
 
     for (let procData of data) {
       procNames.push({ id: procData.id, name: procData.name || procData.id })
@@ -292,20 +390,24 @@ function startupProcesses() {
       )
 
       if (!processes[procData.id]) {
-        // Create new process
         processes[procData.id] = new ProcessMonitor(procData.id, wrapper, procConfig)
-        if (!coldStart || procData.autoStart) {
-          processes[procData.id].start()
-        }
+        newProcesses.push(procData)
       } else {
-        // Update running
         processes[procData.id].updateConfig(procConfig)
       }
     }
 
+    for (let procData of newProcesses) {
+      if (!coldStart) {
+        processes[procData.id].start()
+      } else if (procData.autoStart) {
+        startProcessWithDelayAndDependency(procData)
+      }
+    }
+
     for (let procData of oldData) {
-      if (procNames.find((p) => p.id === procData.id)) continue // Still in use
-      if (!processes[procData.id]) continue // Not in use
+      if (procNames.find((p) => p.id === procData.id)) continue
+      if (!processes[procData.id]) continue
 
       processes[procData.id].stop()
       delete processes[procData.id]
@@ -320,6 +422,20 @@ function startupProcesses() {
     const data = config.get('processes')
     updateProcesses(data, data)
   }
+
+  const launcherServiceIpcWrapper = {
+    on: (event, cb) => {
+      const mappedEvent = event.replace('windowsService', 'launcherService')
+      wrapper.on(mappedEvent, (sender, cmd, param) => {
+        const enrichedParam = Object.assign({}, param || {}, { exePath: process.execPath })
+        cb(sender, cmd, enrichedParam)
+      })
+    },
+    send: (event, msg) => {
+      wrapper.send(event.replace('windowsService', 'launcherService'), msg)
+    },
+  }
+  new WindowsServiceManager(launcherServiceIpcWrapper)
 
   config.onDidChange('processes', updateProcesses)
   config.onDidChange('basePath', updatePaths)
