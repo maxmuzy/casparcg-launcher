@@ -66,7 +66,7 @@ export class WindowsServiceManager {
     log.info('[WindowsService] Configured service: ' + this.serviceName)
   }
 
-  async install(config) {
+  install(config) {
     if (config) {
       this.configure(config)
     }
@@ -88,47 +88,49 @@ export class WindowsServiceManager {
     const createCmd = `sc.exe create "${serviceName}" binPath= "${quotedExe}" start= auto DisplayName= "${displayName}"`
     const descCmd = `sc.exe description "${serviceName}" "${description.replace(/"/g, '\\"')}"`
     const startCmd = `sc.exe start "${serviceName}"`
+    const combined = `${createCmd} && ${descCmd} && ${startCmd}`
 
-    try {
-      const combined = `${createCmd} && ${descCmd} && ${startCmd}`
-      const { stdout, stderr } = await runElevated(combined, 'CasparCG Launcher')
-      log.info('[WindowsService] Install output: ' + stdout)
-      if (stderr) log.warn('[WindowsService] Install stderr: ' + stderr)
-      this.sendStatus('installed', 'Service installed and started successfully')
-      setTimeout(() => this.getStatus(), 1000)
-    } catch (err) {
-      const msg = err && err.message ? err.message : String(err)
-      if (msg.includes('User did not grant permission')) {
-        this.sendStatus('error', 'Administrator permission denied')
-      } else {
-        this.sendStatus('error', 'Install failed: ' + msg)
-      }
-    }
+    runElevated(combined, 'CasparCG Launcher')
+      .then(({ stdout, stderr }) => {
+        log.info('[WindowsService] Install output: ' + stdout)
+        if (stderr) log.warn('[WindowsService] Install stderr: ' + stderr)
+        this.sendStatus('installed', 'Service installed and started successfully')
+        setTimeout(() => this.getStatus(), 1000)
+      })
+      .catch((err) => {
+        const msg = err && err.message ? err.message : String(err)
+        if (msg.includes('User did not grant permission')) {
+          this.sendStatus('error', 'Administrator permission denied')
+        } else {
+          this.sendStatus('error', 'Install failed: ' + msg)
+        }
+      })
   }
 
-  async uninstall() {
+  uninstall() {
     log.info('[WindowsService] Uninstalling service: ' + this.serviceName)
     this.sendStatus('uninstalling', 'Uninstalling service (UAC prompt)...')
 
     const serviceName = this.serviceName
     const stopCmd = `sc.exe stop "${serviceName}"`
     const deleteCmd = `sc.exe delete "${serviceName}"`
+    const combined = `${stopCmd} & ${deleteCmd}`
 
-    try {
-      const combined = `${stopCmd} & ${deleteCmd}`
-      const { stdout, stderr } = await runElevated(combined, 'CasparCG Launcher')
-      log.info('[WindowsService] Uninstall output: ' + stdout)
-      if (stderr) log.warn('[WindowsService] Uninstall stderr: ' + stderr)
-      this.sendStatus('uninstalled', 'Service uninstalled successfully')
-      setTimeout(() => this.getStatus(), 1000)
-    } catch (err) {
-      const msg = err && err.message ? err.message : String(err)
-      if (msg.includes('User did not grant permission')) {
-        this.sendStatus('error', 'Administrator permission denied')
-      } else {
-        this.sendStatus('error', 'Uninstall failed: ' + msg)
-      }
-    }
+    runElevated(combined, 'CasparCG Launcher')
+      .then(({ stdout, stderr }) => {
+        log.info('[WindowsService] Uninstall output: ' + stdout)
+        if (stderr) log.warn('[WindowsService] Uninstall stderr: ' + stderr)
+        this.sendStatus('uninstalled', 'Service uninstalled successfully')
+        setTimeout(() => this.getStatus(), 1000)
+      })
+      .catch((err) => {
+        const msg = err && err.message ? err.message : String(err)
+        if (msg.includes('User did not grant permission')) {
+          this.sendStatus('error', 'Administrator permission denied')
+        } else {
+          this.sendStatus('error', 'Uninstall failed: ' + msg)
+        }
+      })
   }
 
   start() {
